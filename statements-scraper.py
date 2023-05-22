@@ -27,7 +27,7 @@ def save_content(url, filename):
     filter_by = main_content.find('h6')
     if filter_by:
         filter_by.decompose()
-    social = main_content.find('h2', text='Share this page')
+    social = main_content.find('h2', string='Share this page')
     while social:
         next_element = social.nextSibling
         social.decompose()
