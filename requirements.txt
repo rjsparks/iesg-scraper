@@ -1,0 +1,4 @@
+beautifulsoup4>=4.12.2
+markdownify>=0.11.6
+requests>=2.30.0
+weasyprint>=59.0
