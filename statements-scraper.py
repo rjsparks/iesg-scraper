@@ -44,7 +44,8 @@ def save_content(url, filename):
     # check if images are present
     if len(main_content.find_all('img')) > 0:
         # save PDF file
-        html = f'<html><head></head><body>{main_content}</body></html>'
+        style = '<style>img { max-width: 100%; }</style>'
+        html = f'<html><head>{style}</head><body>{main_content}</body></html>'
         HTML(string=html, base_url=BASE_URL).write_pdf(f'{filename}.pdf')
         print(f'saved to {filename}.pdf')
 
