@@ -24,9 +24,15 @@ def save_content(url, filename):
         elements = main_content.find_all(element_type)
         for element in elements:
             element.decompose()
+
     filter_by = main_content.find('h6')
     if filter_by:
         filter_by.decompose()
+
+    filter_by_topic = main_content.find('h2', string='Filter by topic and date')
+    if filter_by_topic:
+        filter_by_topic.decompose()
+
     social = main_content.find('h2', string='Share this page')
     while social:
         next_element = social.nextSibling
