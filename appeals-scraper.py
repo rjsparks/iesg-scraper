@@ -13,7 +13,13 @@ URL = f"{BASE_URL}/iesg/appeal/"
 def save_content(url, filename):
     """Save content as markdown. If image is present, save the PDF as well."""
     response = requests.get(url)
-    for replacement in [b"<![if !supportEmptyParas]>", b"<![endif]>"]:
+
+    # remove MS Word tags
+    for replacement in [
+        b"<![if !supportEmptyParas]>",
+        b"<![endif]>",
+        b"<![if !supportLists]>",
+    ]:
         response._content = response.content.replace(replacement, b"")
     soup = BeautifulSoup(response.content, "html.parser")
 
