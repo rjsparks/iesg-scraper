@@ -15,12 +15,9 @@ def save_content(url, filename):
     response = requests.get(url)
 
     # remove MS Word tags
-    for replacement in [
-        b"<![if !supportEmptyParas]>",
-        b"<![endif]>",
-        b"<![if !supportLists]>",
-    ]:
-        response._content = response.content.replace(replacement, b"")
+    pattern = re.compile(b"\<\!\[if.*?\<\!\[endif\]\>", re.DOTALL)
+    response._content = pattern.sub(b"", response.content)
+
     soup = BeautifulSoup(response.content, "html.parser")
 
     # find the main content of the page
