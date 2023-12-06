@@ -1,12 +1,9 @@
  
-IESG Report regarding "Appeal of decision to advance RFC6376"
-
+# IESG Report regarding "Appeal of decision to advance RFC6376"
 
 June 27, 2013
 
-
-### Summary:
-
+## Summary:
 
 Douglas Otis and Dave Rand have appealed the action taken by the IESG to 
  advance RFC 6376, DomainKeys Identified Mail (DKIM) Signatures, from 
@@ -19,32 +16,11 @@ Douglas Otis and Dave Rand have appealed the action taken by the IESG to
  Internet Standard have been met and that our action was correct. No 
  further action is warranted.
 
-
-### Background:
-
+## Background:
 
 This appeal appears to be brought under section 6.5.2 of RFC 2026:
 
-
-
-> 
-> If an individual should disagree with an action taken by the IESG in  
-> 
->  this process, that person should first discuss the issue with the  
-> 
->  IESG Chair. If the IESG Chair is unable to satisfy the complainant  
-> 
->  then the IESG as a whole should re-examine the action taken, along  
-> 
->  with input from the complainant, and determine whether any further  
-> 
->  action is needed. The IESG shall issue a report on its review of the  
-> 
->  complaint to the IETF.
-> 
-> 
-> 
-
+> If an individual should disagree with an action taken by the IESG in this process, that person should first discuss the issue with the IESG Chair. If the IESG Chair is unable to satisfy the complainant then the IESG as a whole should re-examine the action taken, along with input from the complainant, and determine whether any further action is needed. The IESG shall issue a report on its review of the complaint to the IETF.
 
 Normally, an appeal on the basis of a technical error would be brought 
  under section 6.5.1 of RFC 2026, claiming "the Working Group has made an 
@@ -56,17 +32,11 @@ Normally, an appeal on the basis of a technical error would be brought
  advancement to Internet Standard is unwarranted. That is a valid basis 
  for an appeal of advancement as an IESG action under section 6.5.2.  
 
-  
-
- After reviewing the criteria for advancement to Internet Standard 
+After reviewing the criteria for advancement to Internet Standard 
  defined in section 2 of RFC 6410, we have concluded that this appeal is 
  claiming that criteria (1) has not been satisified:
 
-
-
-> 
-> (1) There are at least two independent interoperating implementations
->  with widespread deployment and successful operational experience.
+> (1) There are at least two independent interoperating implementations with widespread deployment and successful operational experience.
 > 
 > 
 > 
