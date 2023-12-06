@@ -10,9 +10,20 @@ BASE_URL = "https://www6.ietf.org"
 URL = f"{BASE_URL}/iesg/appeal/"
 
 
+def remove_footnote_stub(match):
+    """Replace footnote stub with content"""
+    return match.group(1).replace(b"\n", b"").strip()
+
+
 def save_content(url, filename):
     """Save content as markdown. If image is present, save the PDF as well."""
     response = requests.get(url)
+
+    # preserve footnotes
+    foot_note_content = re.compile(
+        b"\<\!\[if !supportFootnotes\]\>(.*?)\<\!\[endif\]\>", re.DOTALL
+    )
+    response._content = foot_note_content.sub(remove_footnote_stub, response.content)
 
     # remove MS Word tags
     pattern = re.compile(b"\<\!\[if.*?\<\!\[endif\]\>", re.DOTALL)
@@ -22,6 +33,11 @@ def save_content(url, filename):
 
     # find the main content of the page
     main_content = soup.find("div", {"id": "content2"})
+
+    # append footnotes
+    footnotes = soup.find("div", {"style": "mso-element:footnote-list"})
+    if footnotes:
+        main_content.append(footnotes)
 
     # replace whitespace spans in hyperlinks with single space
     link_spans = main_content.find_all("span", {"class": "MsoHyperlink"})
