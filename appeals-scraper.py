@@ -22,6 +22,13 @@ def save_content(url, filename):
 
     # find the main content of the page
     main_content = soup.find("div", {"id": "content2"})
+
+    # replace whitespace spans in hyperlinks with single space
+    link_spans = main_content.find_all("span", {"class": "MsoHyperlink"})
+    for link_span in link_spans:
+        for nested_span in link_span.find_all("span"):
+            nested_span.replace_with(" ")
+
     main_content_str = str(main_content)
 
     # remove exesive lines
