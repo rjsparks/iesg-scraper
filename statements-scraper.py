@@ -42,6 +42,10 @@ def save_content(url, filename):
     # save markdown
     markdown = md(str(main_content))
 
+    # preserve code blocks
+    for block in ['<CODE BEGINS>', '<CODE ENDS>']:
+        markdown = markdown.replace(block, f'`{block}`')
+
     # write to markdown file
     with open(f'{filename}.md', 'w') as file:
         file.write(markdown)
