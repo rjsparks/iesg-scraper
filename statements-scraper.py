@@ -39,8 +39,15 @@ def save_content(url, filename):
         social.decompose()
         social = next_element
 
+    main_content_str = str(main_content)
+
+    # remove exesive lines
+    main_content_str = "\n".join(
+        line for line in str(main_content).splitlines() if line.strip()
+    )
+
     # save markdown
-    markdown = md(str(main_content))
+    markdown = md(main_content_str)
 
     # preserve code blocks
     for block in ['<CODE BEGINS>', '<CODE ENDS>']:
