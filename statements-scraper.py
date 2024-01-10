@@ -39,10 +39,21 @@ def save_content(url, filename):
         social.decompose()
         social = next_element
 
+    # fix tables
+    tables = main_content.find_all('table')
+    for table in tables:
+        caption = table.find('caption')
+        if caption:
+            caption.string = caption.get_text(strip=True)
+        for th in table.find_all('th'):
+            th.string = th.get_text(strip=True)
+        for td in table.find_all('td'):
+            td.string = td.get_text(strip=True)
+
     main_content_str = str(main_content)
 
     # remove exesive lines
-    main_content_str = "\n".join(
+    main_content_str = '\n'.join(
         line for line in str(main_content).splitlines() if line.strip()
     )
 
