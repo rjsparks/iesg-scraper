@@ -56,6 +56,7 @@ def save_content(url, filename):
             p = soup.new_tag('p')
             p.string = caption.get_text().strip()
             table.insert_before(p)
+            caption.decompose()
         for th in table.find_all('th'):
             remove_new_lines(th)
         for td in table.find_all('td'):
