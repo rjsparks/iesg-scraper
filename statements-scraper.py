@@ -50,9 +50,12 @@ def save_content(url, filename):
     # fix tables
     tables = main_content.find_all('table')
     for table in tables:
+
         caption = table.find('caption')
         if caption:
-            remove_new_lines(caption)
+            p = soup.new_tag('p')
+            p.string = caption.get_text().strip()
+            table.insert_before(p)
         for th in table.find_all('th'):
             remove_new_lines(th)
         for td in table.find_all('td'):
