@@ -1,6 +1,6 @@
 import re
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from markdownify import markdownify as md
 from sys import stderr, exit
 from urllib.parse import urljoin
@@ -9,6 +9,14 @@ from weasyprint import HTML
 BASE_URL = 'https://www.ietf.org'
 URL = f'{BASE_URL}/about/groups/iesg/statements/'
 
+
+def remove_new_lines(el):
+    if el.name is not None:
+        for child in el.children:
+            if isinstance(child, NavigableString):
+                child.string.replace_with(child.get_text().strip())
+            else:
+                remove_new_lines(child)
 
 def save_content(url, filename):
     '''Save content as markdown. If image is present, save the PDF as well.'''
@@ -39,8 +47,34 @@ def save_content(url, filename):
         social.decompose()
         social = next_element
 
+    # fix tables
+    tables = main_content.find_all('table')
+    for table in tables:
+
+        caption = table.find('caption')
+        if caption:
+            p = soup.new_tag('p')
+            p.string = caption.get_text().strip()
+            table.insert_before(p)
+            caption.decompose()
+        for th in table.find_all('th'):
+            remove_new_lines(th)
+        for td in table.find_all('td'):
+            remove_new_lines(td)
+
+    main_content_str = str(main_content)
+
+    # remove exesive lines
+    main_content_str = '\n'.join(
+        line for line in str(main_content).splitlines() if line.strip()
+    )
+
     # save markdown
-    markdown = md(str(main_content))
+    markdown = md(main_content_str)
+
+    # preserve code blocks
+    for block in ['<CODE BEGINS>', '<CODE ENDS>']:
+        markdown = markdown.replace(block, f'`{block}`')
 
     # write to markdown file
     with open(f'{filename}.md', 'w') as file:
