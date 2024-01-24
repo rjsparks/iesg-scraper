@@ -70,12 +70,19 @@ def save_content(url, filename):
         line for line in str(main_content).splitlines() if line.strip()
     )
 
+    # fix issue with no newline before headings
+    h_pattern = re.compile(r'(?<!\n)<h')
+    main_content_str = h_pattern.sub('\n<h', main_content_str)
+
     # save markdown
     markdown = md(main_content_str)
 
     # preserve code blocks
     for block in ['<CODE BEGINS>', '<CODE ENDS>']:
         markdown = markdown.replace(block, f'`{block}`')
+
+    # remove any exsive newlines in begining
+    markdown = markdown.lstrip("\n")
 
     # write to markdown file
     with open(f'{filename}.md', 'w') as file:
