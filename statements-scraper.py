@@ -48,6 +48,10 @@ def save_content(url, filename):
         social.decompose()
         social = next_element
 
+    # convert block-heading div tags to h2
+    for div in main_content.find_all('div', class_='block-heading'):
+        div.name = 'h2'
+
     # fix tables
     tables = main_content.find_all('table')
     for table in tables:
