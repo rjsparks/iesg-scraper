@@ -1,3 +1,4 @@
+import glob
 import re
 import requests
 from bs4 import BeautifulSoup, NavigableString
@@ -69,12 +70,19 @@ def save_content(url, filename):
         line for line in str(main_content).splitlines() if line.strip()
     )
 
+    # fix issue with no newline before headings
+    h_pattern = re.compile(r'(?<!\n)<h')
+    main_content_str = h_pattern.sub('\n<h', main_content_str)
+
     # save markdown
     markdown = md(main_content_str)
 
     # preserve code blocks
     for block in ['<CODE BEGINS>', '<CODE ENDS>']:
         markdown = markdown.replace(block, f'`{block}`')
+
+    # remove any exsive newlines in begining
+    markdown = markdown.lstrip("\n")
 
     # write to markdown file
     with open(f'{filename}.md', 'w') as file:
@@ -108,6 +116,14 @@ for statement in statements:
     else:
         stderr.write(f'Can not determine statement date from {date}')
         exit(1)
+
+    increment = 0
+    original_date = date
+    date = f'{original_date}-{increment}'
+    while glob.glob(f'{date}.*'):
+        increment += 1
+        date = f'{original_date}-{increment}'
+
     print(f'processing statement on {date}')
 
     stement_link = urljoin(BASE_URL, tds[1].find('a')['href'])
