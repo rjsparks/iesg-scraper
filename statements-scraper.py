@@ -1,3 +1,4 @@
+import glob
 import re
 import requests
 from bs4 import BeautifulSoup, NavigableString
@@ -108,6 +109,14 @@ for statement in statements:
     else:
         stderr.write(f'Can not determine statement date from {date}')
         exit(1)
+
+    increment = 0
+    original_date = date
+    date = f'{original_date}-{increment}'
+    while glob.glob(f'{date}.*'):
+        increment += 1
+        date = f'{original_date}-{increment}'
+
     print(f'processing statement on {date}')
 
     stement_link = urljoin(BASE_URL, tds[1].find('a')['href'])
