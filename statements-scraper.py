@@ -9,6 +9,9 @@ from weasyprint import HTML
 
 BASE_URL = "https://www.ietf.org"
 URL = f"{BASE_URL}/about/groups/iesg/statements/"
+WWW6_ALT = {
+    "https://www.ietf.org/about/groups/iesg/statements/area-director-sponsoring-documents/": "https://www6.ietf.org/iesg/statement/ad-sponsoring-docs.html",
+}
 
 
 def remove_new_lines(el):
@@ -20,7 +23,7 @@ def remove_new_lines(el):
                 remove_new_lines(child)
 
 
-def save_content(url, filename):
+def save_content(url, filename, www6=False):
     """Save content as markdown. If image is present, save the PDF as well."""
 
     response = requests.get(url)
@@ -28,6 +31,8 @@ def save_content(url, filename):
 
     # find the main content of the page
     main_content = soup.find("main")
+    if www6:
+        main_content = soup.find("div", id="content2")
 
     # find and delete unwanted
     for element_type in ["nav", "form", "button"]:
@@ -132,4 +137,7 @@ for statement in statements:
 
     stement_link = urljoin(BASE_URL, tds[1].find("a")["href"])
 
-    save_content(stement_link, date)
+    if stement_link in WWW6_ALT.keys():
+        save_content(WWW6_ALT[stement_link], date, www6=True)
+    else:
+        save_content(stement_link, date)
