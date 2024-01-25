@@ -23,7 +23,25 @@ def remove_new_lines(el):
                 remove_new_lines(child)
 
 
-def save_content(url, filename, www6=False):
+def save_content_from_www6(url, filename):
+    """Save www6 content as markdown."""
+
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    # find the main content of the page
+    main_content = soup.find("div", id="content2")
+
+    # save markdown
+    markdown = md(str(main_content))
+
+    # write to markdown file
+    with open(f"{filename}.md", "w") as file:
+        file.write(markdown)
+        print(f"saved to {filename}.md")
+
+
+def save_content(url, filename):
     """Save content as markdown. If image is present, save the PDF as well."""
 
     response = requests.get(url)
@@ -31,8 +49,6 @@ def save_content(url, filename, www6=False):
 
     # find the main content of the page
     main_content = soup.find("main")
-    if www6:
-        main_content = soup.find("div", id="content2")
 
     # find and delete unwanted
     for element_type in ["nav", "form", "button"]:
@@ -138,6 +154,6 @@ for statement in statements:
     stement_link = urljoin(BASE_URL, tds[1].find("a")["href"])
 
     if stement_link in WWW6_ALT.keys():
-        save_content(WWW6_ALT[stement_link], date, www6=True)
+        save_content_from_www6(WWW6_ALT[stement_link], date)
     else:
         save_content(stement_link, date)
